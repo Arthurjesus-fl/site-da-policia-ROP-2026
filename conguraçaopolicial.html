@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dados Pessoais</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            color: #0f172a;
+            
+            
+            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('./imagem/Planner\ Planejador\ Anual\ Horizontal\ A4\ \(1\).png');
+            
+            background-size: cover;      
+            background-position: center; 
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .option-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .option-card:hover {
+      border-color: #1e40af;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+    }
+
+    .option-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.8rem;
+      color: #1e40af;
+    }
+
+    .option-card h3 {
+      font-size: 1.1rem;
+      color: #1e293b;
+      margin-bottom: 0.5rem;
+    }
+
+    .option-card p {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 1rem;
+    }
+
+    .option-card input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 0.8rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .option-card button {
+      width: 100%;
+      padding: 0.6rem;
+      background: #1e40af;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .option-card button:hover {
+      background: #1e3a8a;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+      <div class="header-content">
+          <div class="logo">👤</div>
+          <div class="header-text">
+              <h1>Dados Pessoais</h1>
+              <p>Gerencie suas informações de cadastro</p>
+          </div>
+      </div>
+  </header>
+
+  <main class="container">
+      <h2 style="color: white;">Opções disponíveis:</h2>
+      <div class="options-grid">
+          
+          
+          <div class="option-card">
+              <div class="option-icon">📱</div>
+              <h3>Alterar telefone de contato</h3>
+              <p>Atualize seu número de celular para receber notificações.</p>
+              <input type="text" placeholder="(79) 99999-9999">
+              <button>Salvar Telefone</button>
+          </div>
+
+          
+          <div class="option-card">
+              <div class="option-icon">📧</div>
+              <h3>Atualizar endereço de e-mail</h3>
+              <p>Informe um novo e-mail para comunicações oficiais.</p>
+              <input type="email" placeholder="exemplo@email.com">
+              <button>Salvar E-mail</button>
+          </div>
+
+          
+          <div class="option-card">
+              <div class="option-icon">🔑</div>
+              <h3>Modificar senha de acesso</h3>
+              <p>Troque sua senha regularmente para manter sua conta segura.</p>
+              <input type="password" placeholder="Nova senha">
+              <input type="password" placeholder="Confirmar senha">
+              <button>Alterar Senha</button>
+          </div>
+
+          
+          <div class="option-card">
+              <div class="option-icon">👥</div>
+              <h3>Dados básicos do perfil</h3>
+              <p>Altere seu nome, matricula ou outras informações pessoais.</p>
+              <input type="text" placeholder="Nome completo">
+              <input type="text" placeholder="Matrícula">
+              <button>Salvar Dados</button>
+          </div>
+      </div>
+
+      <a href="./sistema-corporativo.html" class="btn btn-secondary" style="margin-top:2rem; display:inline-block;">⬅ Voltar </a>
+  </main>
+</body>
+</html>

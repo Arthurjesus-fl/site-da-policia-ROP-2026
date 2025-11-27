@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Ocorrência - Etapa 3</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    
+    body { font-family: 'Inter', Arial, sans-serif; }
+    .container { max-width: 900px; margin: auto; }
+    .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
+    .tab { flex: 1; text-align: center; padding: 12px; font-weight: 600; color: #555; border-radius: 8px 8px 0 0; transition: all 0.3s ease; background-color: #f1f1f1; }
+    .tab.active { background-color: #004d99; color: #fff; border-bottom: 2px solid #004d99; }
+    .campo { margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.25rem; font-weight: 600; color: #333; }
+    .descricao { font-size: 0.875rem; color: #6c757d; margin-top: -0.25rem; margin-bottom: 0.5rem; }
+    input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    .button-group { display: flex; justify-content: space-between; margin-top: 2rem; }
+    .nav-button { padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: background-color 0.3s; cursor: pointer; text-align: center; border: none; }
+    .back-button { background-color: #6c757d; color: #fff; }
+    .action-button { background-color: #10b981; color: #fff; padding: 12px 25px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
+  </style>
+</head>
+<body class="bg-gray-100 p-5">
+
+  <div class="container bg-white p-6 md:p-10 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6 border-b pb-3">Relatório de Ocorrência Policial (ROP)</h1>
+
+    <div class="tabs">
+      <a href="./etapa1.html" class="tab">1. Informações Básicas</a>
+      <a href="./etapa2.html" class="tab">2. Elementos e Narrativa</a>
+      <div class="tab active">3. Finalização</div>
+    </div>
+
+    <div class="content">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Etapa 3: Finalização e Assinatura</h2>
+
+      <div class="campo">
+        <label for="assinatura_digital">Assinatura Digital (Senha/Token)</label>
+        <input type="password" id="assinatura_digital" placeholder="Insira sua senha/token de assinatura" required>
+      </div>
+
+      <div class="campo">
+        <label for="protocolo_final">Protocolo/ID Final</label>
+        <input type="text" id="protocolo_final" placeholder="Será gerado após a submissão" disabled>
+      </div>
+      
+      <div class="campo">
+        <label>Ação Final</label>
+        <button onclick="finalizarROP()" class="action-button">Finalizar e Gerar PDF</button>
+      </div>
+
+      <div class="button-group">
+        <a href="./etapa2.html" class="nav-button back-button">Voltar para Etapa 2</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const idOcorrencia = localStorage.getItem('idOcorrenciaAtual');
+    const protocoloInput = document.getElementById('protocolo_final');
+    
+    if (!idOcorrencia) {
+      alert("🚨 Erro: O ID da ocorrência não foi encontrado. Retorne à Etapa 1.");
+    } else {
+        
+      protocoloInput.value = `ID Provisório: ${idOcorrencia.slice(0, 8)}...`; 
+    }
+
+    function finalizarROP() {
+      const senhaAssinatura = document.getElementById('assinatura_digital').value;
+      if (!senhaAssinatura) {
+        alert("🚨 Por favor, insira sua senha de assinatura digital.");
+        return;
+      }
+      
+      const dadosFinalizacao = {
+        assinatura_validada: true,
+        senha_hash: senhaAssinatura 
+      };
+      
+      
+      fetch(`http://localhost:5000/api/rop/${idOcorrencia}/finalizar`, {
+        method: 'PUT', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dadosFinalizacao)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro na rede ou servidor: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.erro) {
+          alert('❌ Erro na finalização: ' + data.erro);
+        } else {
+          
+          alert('✅ ROP Finalizado! Protocolo Oficial: ' + data.protocolo_oficial);
+          protocoloInput.value = data.protocolo_oficial;
+          localStorage.removeItem('idOcorrenciaAtual'); 
+        }
+      })
+      .catch(error => {
+        console.error('Falha ao finalizar o ROP:', error);
+        alert('🚫 Erro de conexão com o backend. O servidor Node.js está rodando na porta 5000?');
+      });
+    }
+  </script>
+</body>
+</html>

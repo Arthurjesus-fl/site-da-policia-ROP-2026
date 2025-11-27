@@ -1,0 +1,15 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    
+    background-image: url("./imagem/Imagem\ do\ WhatsApp\ de\ 2025-08-25\ à\(s\)\ 19.17.00_a4aa06b3.jpg"); 
+    background-size: cover;        
+    background-position: center;   
+    background-repeat: no-repeat;  
+
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}

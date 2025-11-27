@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Corporativo - Polícia Militar SE</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        
+
+        :root {
+            
+            --primary-color: #0b509d; 
+            --primary-dark: #093f7e;
+            --secondary-bg: #f8f9fa; 
+            --text-color-primary: #212529; 
+            --text-color-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --card-bg: white; 
+            --accent-blue: #0d6efd;
+            --accent-yellow-bg: #fff3cd;
+            --accent-yellow-border: #ffc107;
+            --accent-yellow-text: #664d03;
+            --font-primary: 'Inter', sans-serif;
+
+            
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.08); 
+            --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.1);
+
+            
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.75rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 2rem;
+        }
+
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            
+            background-color: #181818; 
+            background-image: url('./imagem/Planner\ Planejador\ Anual\ Horizontal\ A4\ \(1\).png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; 
+            
+            color: white; 
+            min-height: 100vh;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column; 
+        }
+
+        
+        .header {
+            background: var(--primary-color);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-lg); 
+            box-shadow: var(--shadow-sm); 
+            z-index: 20; 
+            position: sticky; 
+            top: 0;
+            width: 100%;
+            height: 56px; 
+            display: flex;
+            align-items: center;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .app-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        
+        .main-content {
+            flex-grow: 1;
+            padding: var(--spacing-lg);
+            
+            background: rgba(0, 0, 0, 0.1); 
+        }
+
+        
+        .container {
+            max-width: 1400px; 
+            margin: 0 auto;
+        }
+        
+        
+        .logo-section, .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+        
+        .shield-icon {
+            width: 38px; 
+            height: 38px; 
+            background: white;
+            border-radius: 8px; 
+            display: grid;
+            place-items: center;
+            color: var(--primary-color);
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .header-title {
+            font-size: 1.5rem; 
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .user-info > div > div:first-child {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,0.5);
+            font-size: 1rem;
+        }
+
+       
+        .welcome-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md); 
+            border: 1px solid var(--border-color); 
+        }
+
+        .welcome-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-description {
+            color: var(--text-color-secondary);
+        }
+
+        .quick-actions-container {
+            margin-bottom: var(--spacing-lg);
+            
+            background: rgba(0, 0, 0, 0.3); 
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        
+        .quick-actions-container h3 {
+            font-size: 1.1rem; 
+            margin-bottom: var(--spacing-md); 
+            text-align: center;
+            color: white !important; 
+        }
+
+
+        
+        .dashboard-main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr; 
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        .dashboard-cards-grid {
+            display: grid;
+            
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); 
+            gap: var(--spacing-lg);
+        }
+        
+        @media (min-width: 1200px) {
+            .dashboard-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+
+        .section-card {
+            
+            background: var(--card-bg); 
+            border-radius: 12px;
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm); 
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative; 
+        }
+        
+        
+        #rop-manager-card:hover {
+            transform: none;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            border-radius: 50%; 
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-md);
+            background: transparent;
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+            margin-bottom: var(--spacing-xs);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent; 
+        }
+
+        .feature-item:hover {
+            background: #f1f5f9; 
+            border-left: 4px solid var(--accent-blue);
+            border-color: #e2e8f0;
+        }
+        
+        
+        .feature-content {
+            flex-grow: 1;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            color: var(--text-color-primary);
+            margin-bottom: 0.25rem;
+            font-size: 1.05rem;
+        }
+
+        .feature-description {
+            font-size: 0.9rem;
+            color: var(--text-color-secondary);
+            line-height: 1.4;
+        }
+        
+        
+        .feature-arrow {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+            margin-left: var(--spacing-md);
+        }
+        
+        .feature-item:hover .feature-arrow {
+            transform: translateX(4px); /
+        }
+
+
+        
+        .btn {
+            padding: var(--spacing-sm) 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-logout {
+            background: transparent;
+            color: white;
+            box-shadow: none;
+            border: 1px solid transparent;
+            margin-left: var(--spacing-md);
+        }
+
+        .btn-logout:hover {
+            color: #ccc;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+        }
+        
+        
+        .action-cards-grid {
+            display: grid;
+            
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) 0;
+            justify-items: center;
+        }
+
+        .action-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: var(--spacing-lg);
+            border-radius: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            min-height: 150px;
+            width: 100%; 
+        }
+
+        
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-color);
+            background-color: #e6f0fa; 
+        }
+        
+        
+        .action-card:hover .action-card-icon {
+            color: var(--primary-color);
+        }
+
+        .action-card-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-sm);
+            transition: color 0.2s ease; 
+        }
+
+        .action-card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--primary-dark);
+        }
+
+
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); 
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            margin-top: 0;
+        }
+        
+        .stat-card-small {
+            background: var(--card-bg);
+            padding: var(--spacing-md);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            text-align: left; 
+            position: relative;
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            font-size: 1.5rem;
+            opacity: 0.3;
+            color: var(--primary-color);
+        }
+
+        .stat-number {
+            font-size: 1.8rem; 
+            font-weight: 800;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+             font-size: 0.85rem;
+             color: var(--text-color-secondary);
+        }
+        
+       
+        .occurrence-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .occurrence-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid #f8f9fa; 
+            font-size: 0.9rem;
+        }
+        
+        .occurrence-item:last-child {
+            border-bottom: none;
+        }
+        
+        .occurrence-id {
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .occurrence-status {
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+        
+        .status-open {
+            background-color: #d1e7dd; 
+            color: #0f5132;
+        }
+        
+        .status-in-progress {
+             background-color: #fff3cd; 
+             color: #664d03;
+        }
+
+       
+        .alert {
+            background: #e9f5ff; 
+            border: 1px solid #cce5ff;
+            border-left: 6px solid #007bff; 
+            border-radius: 12px;
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: center;
+            color: #004085; 
+        }
+        
+        .alert-icon {
+            font-size: 1.5rem;
+            color: #007bff;
+        }
+
+        .alert-title {
+            font-weight: 700;
+            color: #004085;
+        }
+        
+        .alert-text {
+            color: #004085;
+        }
+
+        
+        .rop-manager-view {
+            transition: opacity 0.3s ease;
+        }
+        .rop-manager-view.hidden {
+            display: none;
+        }
+        .rop-manager-view.fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .rop-back-btn {
+            background: none;
+            border: none;
+            color: var(--text-color-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: var(--spacing-md);
+            font-size: 0.95rem;
+            padding: 0;
+        }
+        .rop-back-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .rop-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .rop-input:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
+        }
+
+        .rop-btn-primary {
+            width: 100%;
+            background-color: var(--accent-blue);
+            color: white;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .rop-btn-primary:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .rop-btn-secondary {
+            width: 100%;
+            background-color: white;
+            color: var(--text-color-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+        .rop-btn-secondary:hover {
+            background-color: #f8f9fa;
+        }
+
+       
+        .rop-file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            border: 1px solid #f1f1f1;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        .rop-file-item:hover {
+            background-color: #f8f9fa;
+        }
+        .rop-file-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #fff5f5; /* Red-50 */
+            color: #ef4444; /* Red-500 */
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+
+        
+        #toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1e293b;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        #toast.visible {
+            opacity: 1;
+        }
+
+        
+        @media (min-width: 1024px) {
+            .main-content {
+                padding: var(--spacing-lg);
+            }
+        }
+
+        @media (max-width: 1023px) {
+            .header-content {
+                justify-content: space-between;
+            }
+            
+            .user-info {
+                display: none; 
+            }
+            
+            .main-content {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+            
+            .dashboard-main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+            }
+            
+            .stat-card-small {
+                 text-align: center;
+            }
+            
+            .stat-icon {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <!-- PM = Polícia Militar -->
+                <div class="shield-icon" role="img" aria-label="Ícone de escudo">PM</div> 
+                <div>
+                    <div class="header-title">SIGOR</div>
+                    <div style="font-size: 0.8rem; opacity: 0.9;">Sistema Integrado de Gestão de Ocorrência</div>
+                </div>
+            </div>
+            
+            <!-- User Info visível no Desktop, escondido no Mobile -->
+            <div class="user-info">
+                <div>
+                    <div>Sgt. João Silva</div>
+                    <div style="opacity: 0.8; font-size: 0.85rem;">Mat: 12345-6</div>
+                </div>
+                <div class="user-avatar" role="img" aria-label="Avatar do usuário">👤</div>
+                <a href="index.html" class="btn btn-logout" role="button">
+                     Sair
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-wrapper">
+        <div class="main-content">
+            <div class="container">
+                <!-- Seção de Boas-Vindas -->
+                <div class="welcome-section" aria-labelledby="welcome-title">
+                    <h1 id="welcome-title" class="welcome-title">Painel Administrativo</h1>
+                    <p class="welcome-description">
+                        Bem-vindo(a), Sgt. João Silva. Utilize o painel abaixo para gerenciar o sistema de Registros de Ocorrências Policiais (ROP).
+                    </p>
+                </div>
+
+                <!-- Estatísticas de Ocorrências em Tempo Real -->
+                <div class="stats-grid">
+                    <div class="stat-card-small">
+                        <span class="stat-icon">📜</span>
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">ROPs Abertos</div>
+                    </div>
+                    <div class="stat-card-small">
+                        <span class="stat-icon">🔍</span>
+                        <div class="stat-number">45</div>
+                        <div class="stat-label">ROPs em Análise</div>
+                    </div>
+                    <div class="stat-card-small">
+                        <span class="stat-icon">🔔</span>
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Pendências</div>
+                    </div>
+                </div>
+
+                <!-- Ações Rápidas -->
+                <div class="quick-actions-container">
+                    <h3 style="font-size: 1.1rem; margin-bottom: var(--spacing-md); text-align: center;">Ações de Serviço</h3>
+                    <div class="action-cards-grid">
+                        <a href="./etapa1.html" class="action-card">
+                            <span class="action-card-icon">➕</span>
+                            <span class="action-card-title">Novo ROP</span>
+                        </a>
+                        <a href="./acompanhamentopolicial.html" class="action-card">
+                            <span class="action-card-icon">📋</span>
+                            <span class="action-card-title">Consultar ROPs</span>
+                        </a>
+                        <a href="estatisticas.html" class="action-card">
+                            <span class="action-card-icon">📊</span>
+                            <span class="action-card-title">Relatórios</span>
+                        </a>
+                        <a href="conguraçaopolicial.html" class="action-card">
+                            <span class="action-card-icon">⚙️</span>
+                            <span class="action-card-title">Configurações</span>
+                        </a>
+                    </div>
+                </div>
+
+                
+                <div class="dashboard-main-grid">
+                    
+                    <div class="dashboard-cards-grid">
+                        
+                        
+                        <div class="section-card" id="rop-manager-card" style="min-height: 400px; overflow: hidden;">
+                            
+                           
+                            <div id="view-home" class="rop-manager-view fade-in">
+                                <h2 class="section-title">
+                                    <span class="section-icon" style="background: var(--accent-blue);">
+                                        <i class="ph-fill ph-file-text" style="font-size: 1.2rem;"></i>
+                                    </span>
+                                    Gerenciamento de Documentos ROP
+                                </h2>
+                                <ul class="feature-list">
+                                    <li class="feature-item" onclick="navigateTo('view-download')">
+                                        <div class="feature-content">
+                                            <div class="feature-title">Baixar PDF do ROP</div>
+                                            <div class="feature-description">Gere e baixe a versão oficial em PDF de qualquer Registro de Ocorrência.</div>
+                                        </div>
+                                        <span class="feature-arrow"><i class="ph-bold ph-arrow-right"></i></span>
+                                    </li>
+                                    <li class="feature-item" onclick="navigateTo('view-search')">
+                                        <div class="feature-content">
+                                            <div class="feature-title">Busca por Certidão</div>
+                                            <div class="feature-description">Localize ROPs por número de protocolo ou CPF/CNPJ da parte envolvida.</div>
+                                        </div>
+                                        <span class="feature-arrow"><i class="ph-bold ph-arrow-right"></i></span>
+                                    </li>
+                                    <li class="feature-item" onclick="navigateTo('view-archive')">
+                                        <div class="feature-content">
+                                            <div class="feature-title">Arquivo Digital</div>
+                                            <div class="feature-description">Acesse o acervo completo de ROPs finalizados.</div>
+                                        </div>
+                                        <span class="feature-arrow"><i class="ph-bold ph-arrow-right"></i></span>
+                                    </li>
+                                </ul>
+                                
+                            </div>
+
+                            
+                            <div id="view-download" class="rop-manager-view hidden">
+                                <button onclick="navigateTo('view-home')" class="rop-back-btn">
+                                    <i class="ph-bold ph-arrow-left"></i> Voltar
+                                </button>
+                                
+                                <div style="text-align: center; margin-top: 1rem;">
+                                    <div style="background: #eff6ff; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; color: var(--accent-blue);">
+                                        <i class="ph-fill ph-download-simple" style="font-size: 1.8rem;"></i>
+                                    </div>
+                                    <h3 style="color: var(--text-color-primary); font-weight: 700; margin-bottom: 0.5rem;">Gerar PDF Oficial</h3>
+                                    <p style="color: var(--text-color-secondary); font-size: 0.9rem; margin-bottom: 2rem;">Digite o número do ROP para gerar o documento.</p>
+                                    
+                                    <input type="text" placeholder="Ex: ROP-2025-9988" class="rop-input">
+                                    <button onclick="simulateAction('Gerando PDF...', 'PDF baixado com sucesso!')" class="rop-btn-primary">
+                                        Gerar e Baixar
+                                    </button>
+
+                                    <button onclick="navigateTo('view-home')" class="rop-btn-secondary">
+                                        <i class="ph-bold ph-house"></i>
+                                        Voltar ao Menu
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+                            <div id="view-search" class="rop-manager-view hidden">
+                                <button onclick="navigateTo('view-home')" class="rop-back-btn">
+                                    <i class="ph-bold ph-arrow-left"></i> Voltar
+                                </button>
+                                
+                                <h3 style="color: var(--text-color-primary); font-weight: 700; margin-bottom: 1.5rem;">Busca de Certidões</h3>
+                                
+                                <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                                    <button style="background: white; border: 1px solid var(--border-color); padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; color: var(--primary-color); border-color: var(--primary-color);">Por Protocolo</button>
+                                    <button style="background: transparent; border: 1px solid transparent; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; color: var(--text-color-secondary);">Por CPF/CNPJ</button>
+                                </div>
+
+                                <div style="position: relative;">
+                                    <i class="ph ph-magnifying-glass" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-color-secondary);"></i>
+                                    <input type="text" placeholder="Digite o número do protocolo..." class="rop-input" style="padding-left: 2.8rem; margin-bottom: 1rem;">
+                                </div>
+                                
+                                <button onclick="simulateAction('Buscando...', 'Nenhum registro encontrado.')" class="rop-btn-primary" style="background-color: var(--text-color-primary);">
+                                    Pesquisar
+                                </button>
+
+                                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                    <button onclick="navigateTo('view-home')" class="rop-btn-secondary" style="margin-top: 0;">
+                                        <i class="ph-bold ph-house"></i>
+                                        Voltar ao Menu
+                                    </button>
+                                </div>
+                            </div>
+
+                            
+                            <div id="view-archive" class="rop-manager-view hidden">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color);">
+                                    <button onclick="navigateTo('view-home')" class="rop-back-btn" style="margin-bottom: 0;">
+                                        <i class="ph-bold ph-arrow-left"></i> Voltar
+                                    </button>
+                                    <span style="font-size: 0.8rem; background: var(--secondary-bg); padding: 4px 10px; border-radius: 20px; color: var(--text-color-secondary);">124 Docs</span>
+                                </div>
+
+                                <div style="max-height: 280px; overflow-y: auto;">
+                                    
+                                    <div class="rop-file-item">
+                                        <div style="display: flex; align-items: center;">
+                                            <div class="rop-file-icon">
+                                                <i class="ph-fill ph-file-pdf"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600; color: var(--text-color-primary); font-size: 0.95rem;">ROP-2024-1029.pdf</div>
+                                                <div style="font-size: 0.8rem; color: var(--text-color-secondary);">24 Nov 2024</div>
+                                            </div>
+                                        </div>
+                                        <i class="ph-bold ph-download-simple" style="color: var(--text-color-secondary); cursor: pointer;"></i>
+                                    </div>
+                                    
+                                    <div class="rop-file-item">
+                                        <div style="display: flex; align-items: center;">
+                                            <div class="rop-file-icon">
+                                                <i class="ph-fill ph-file-pdf"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600; color: var(--text-color-primary); font-size: 0.95rem;">ROP-2024-0982.pdf</div>
+                                                <div style="font-size: 0.8rem; color: var(--text-color-secondary);">22 Nov 2024</div>
+                                            </div>
+                                        </div>
+                                        <i class="ph-bold ph-download-simple" style="color: var(--text-color-secondary); cursor: pointer;"></i>
+                                    </div>
+                                    
+                                    <div class="rop-file-item">
+                                        <div style="display: flex; align-items: center;">
+                                            <div class="rop-file-icon">
+                                                <i class="ph-fill ph-file-pdf"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight: 600; color: var(--text-color-primary); font-size: 0.95rem;">ROP-2024-0801.pdf</div>
+                                                <div style="font-size: 0.8rem; color: var(--text-color-secondary);">15 Nov 2024</div>
+                                            </div>
+                                        </div>
+                                        <i class="ph-bold ph-download-simple" style="color: var(--text-color-secondary); cursor: pointer;"></i>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #f1f1f1;">
+                                    <button onclick="navigateTo('view-home')" class="rop-btn-secondary">
+                                        <i class="ph-bold ph-arrow-u-up-left"></i>
+                                        Início
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                       
+                        <div class="section-card">
+                            <h2 class="section-title">
+                                <span class="section-icon">🚨</span>
+                                Alertas & Avisos
+                            </h2>
+                            <p class="feature-description" style="margin-bottom: var(--spacing-md);">Visualize informações e comunicados importantes do Comando Geral.</p>
+                            <div class="alert" style="margin-bottom: 0;">
+                                <div class="alert-icon" role="img" aria-label="Ícone de alerta de segurança">⚠️</div>
+                                <div class="alert-content">
+                                    <div class="alert-title">Nova Diretriz Operacional</div>
+                                    <div class="alert-text">
+                                        Atualização obrigatória sobre o uso de EPIs a partir de 01/01/2026. Leia no mural.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div> 
+
+                    
+                    <div class="section-card recent-occurrences-card">
+                        <h2 class="section-title">
+                            <span class="section-icon" style="background: #0d6efd;">⏳</span>
+                            Pendências Urgentes
+                        </h2>
+                        <ul class="occurrence-list">
+                            <li class="occurrence-item">
+                                <div>
+                                    <span class="occurrence-id">ROP #2025-0421</span>
+                                    <div class="feature-description">Furto de veículo</div>
+                                </div>
+                                <span class="occurrence-status status-in-progress">Preencher B.O.</span>
+                            </li>
+                            <li class="occurrence-item">
+                                <div>
+                                    <span class="occurrence-id">ROP #2025-0420</span>
+                                    <div class="feature-description">Lesão Corporal</div>
+                                </div>
+                                <span class="occurrence-status status-open">Análise Jurídica</span>
+                            </li>
+                            <li class="occurrence-item">
+                                <div>
+                                    <span class="occurrence-id">ROP #2025-0419</span>
+                                    <div class="feature-description">Acidente Trânsito</div>
+                                </div>
+                                <span class="occurrence-status status-in-progress">Anexar Fotos</span>
+                            </li>
+                            <li class="occurrence-item">
+                                <div>
+                                    <span class="occurrence-id">ROP #2025-0418</span>
+                                    <div class="feature-description">Tráfico de Drogas</div>
+                                </div>
+                                <span class="occurrence-status status-open">Relatório Final</span>
+                            </li>
+                            <li class="occurrence-item">
+                                <div>
+                                    <span class="occurrence-id">ROP #2025-0417</span>
+                                    <div class="feature-description">Posse Ilegal Arma</div>
+                                </div>
+                                <span class="occurrence-status status-in-progress">Revisão Supervisor</span>
+                            </li>
+                            <li class="occurrence-item">
+                                <div>
+                                    <span class="occurrence-id">ROP #2025-0416</span>
+                                    <div class="feature-description">Vandalismo</div>
+                                </div>
+                                <span class="occurrence-status status-open">Sem pendências</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    
+    
+    <div id="toast">
+        <i class="ph-fill ph-check-circle" style="color: #4ade80; font-size: 1.2rem;"></i>
+        <span id="toast-message">Operação realizada</span>
+    </div>
+
+    <script>
+        
+        function navigateTo(viewId) {
+            
+            const views = ['view-home', 'view-download', 'view-search', 'view-archive'];
+            
+            
+            views.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+
+            
+            const activeView = document.getElementById(viewId);
+            if (activeView) {
+                activeView.classList.remove('hidden');
+                // Reiniciar animação
+                activeView.classList.remove('fade-in');
+                void activeView.offsetWidth; 
+                activeView.classList.add('fade-in');
+            }
+        }
+
+        
+        function simulateAction(loadingMsg, successMsg) {
+            const toast = document.getElementById('toast');
+            const msg = document.getElementById('toast-message');
+            
+            if(!toast || !msg) return;
+
+            msg.textContent = loadingMsg;
+            toast.classList.add('visible');
+            
+            setTimeout(() => {
+                msg.textContent = successMsg;
+                
+                setTimeout(() => {
+                    toast.classList.remove('visible');
+                }, 2000);
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

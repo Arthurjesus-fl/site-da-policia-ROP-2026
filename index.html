@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Acesso - PM SE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+       
+    
+    background-color: #222;
+    background-image: url(./imagem/Planner\ Planejador\ Anual\ Horizontal\ A4\ \(1\).png) ;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 32px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #1e40af;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: white;
+            font-size: 24px;
+        }
+
+        .shield-icon {
+            width: 32px;
+            height: 32px;
+            fill: currentColor;
+        }
+
+        .user-icon {
+            width: 32px;
+            height: 32px;
+            fill: currentColor;
+        }
+
+        h1 {
+            color: #1e40af;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .user-type-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .user-type-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .user-type-card:hover {
+            border-color: #1e40af;
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+        .user-type-card.police {
+            border-color: #1e40af;
+            background: #eff6ff;
+        }
+
+        .user-type-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            color: #64748b;
+        }
+
+        .user-type-card.police .user-type-icon {
+            color: #1e40af;
+        }
+
+        .user-type-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 8px;
+        }
+
+        .user-type-card.police .user-type-title {
+            color: #1e40af;
+        }
+
+        .user-type-button {
+            background: #64748b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            width: 100%;
+        }
+
+        .user-type-card.police .user-type-button {
+            background: #1e40af;
+        }
+
+        .user-type-button:hover {
+            background: #475569;
+        }
+
+        .user-type-card.police .user-type-button:hover {
+            background: #1e3a8a;
+        }
+
+        .login-form {
+            display: none;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s ease;
+            background: white;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .login-button {
+            width: 100%;
+            background: #64748b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-bottom: 12px;
+        }
+
+        .login-button.police {
+            background: #1e40af;
+        }
+
+        .login-button:hover {
+            background: #475569;
+        }
+
+        .login-button.police:hover {
+            background: #1e3a8a;
+        }
+
+        .back-button {
+            width: 100%;
+            background: transparent;
+            color: #64748b;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            background: #f8fafc;
+            border-color: #d1d5db;
+        }
+
+        .restriction-notice {
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 16px;
+            line-height: 1.4;
+        }
+
+        .restriction-notice a {
+            color: #1e40af;
+            text-decoration: none;
+        }
+
+        .restriction-notice a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 24px;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <div class="container">
+        
+        <div id="userTypeSelection" class="card">
+            <div class="logo">
+                <svg class="shield-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h1>Sistema Integrado de Gestão de Ocorrência</h1>
+            <p class="subtitle">Selecione o tipo de usuário</p>
+            
+            <div class="user-type-selector">
+                <div class="user-type-card" onclick="showLoginForm('citizen')">
+                    <div class="user-type-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="currentColor"/>
+                            <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="user-type-title">Cidadão</div>
+                    <button class="user-type-button">▶ Entrar</button>
+                </div>
+                
+                <div class="user-type-card police" onclick="showLoginForm('police')">
+                    <div class="user-type-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="user-type-title">POLÍCIA MILITAR</div>
+                    <button class="user-type-button">▶ Entrar</button>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="citizenLogin" class="card login-form">
+            <div class="logo">
+                <svg class="user-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="currentColor"/>
+                    <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h1>Cidadão</h1>
+            <p class="subtitle">Portal do Cidadão</p>
+            
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Usuário</label>
+                    <input type="text" class="form-input" placeholder="Digite seu usuário">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input type="password" class="form-input" placeholder="Digite sua senha">
+                </div>
+                
+                <a href="./portal-cidade.html"><button type="button" class="login-button portal-cidado">Entrar</button></a>
+                <button type="button" class="back-button" onclick="showUserTypeSelection()">Voltar</button>
+            </form>
+        </div>
+
+        
+        <div id="policeLogin" class="card login-form">
+            <div class="logo">
+                <svg class="shield-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h1>POLÍCIA MILITAR</h1>
+            <p class="subtitle">Sistema Corporativo</p>
+            
+            <form>
+                <div class="form-group">
+                    <label class="form-label">Matrícula</label>
+                    <input type="text" class="form-input" placeholder="Digite sua matrícula">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input type="password" class="form-input" placeholder="Digite sua senha">
+                </div>
+                
+                <a href="./sistema-corporativo.html"><button type="button" class="login-button police">Entrar</button></a>
+                <button type="button" class="back-button" onclick="showUserTypeSelection()">Voltar</button>
+            </form>
+            
+            <div class="restriction-notice">
+                Sistema restrito aos membros da <a href="#">Polícia Militar</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showLoginForm(type) {
+            document.getElementById('userTypeSelection').style.display = 'none';
+            document.getElementById('citizenLogin').classList.remove('active');
+            document.getElementById('policeLogin').classList.remove('active');
+            
+            if (type === 'citizen') {
+                document.getElementById('citizenLogin').classList.add('active');
+            } else if (type === 'police') {
+                document.getElementById('policeLogin').classList.add('active');
+            }
+        }
+
+        function showUserTypeSelection() {
+            document.getElementById('userTypeSelection').style.display = 'block';
+            document.getElementById('citizenLogin').classList.remove('active');
+            document.getElementById('policeLogin').classList.remove('active');
+        }
+
+        
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Formulário enviado! (Demonstração)');
+            });
+        });
+    </script>
+</body>
+</html>

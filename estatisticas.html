@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Estatísticas</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  
+  <style>
+    :root {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .menu a {
+        text-decoration: none;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            
+            'primary': '#003399', 
+            'secondary': '#36A2EB', 
+            'accent': '#FF6384', 
+            'background': '#f5f7fa', 
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background min-h-screen flex flex-col items-center p-4">
+
+  
+  <header class="w-full max-w-4xl mb-6">
+    <h1 class="text-3xl font-extrabold text-primary text-center">Painel de Estatísticas do ROP</h1>
+  </header>
+
+  
+  <nav class="w-full max-w-4xl mb-8 flex flex-wrap justify-center gap-4">
+    <a href="./sistema-corporativo.html" class="px-4 py-2 bg-white text-primary border border-primary rounded-lg font-semibold hover:bg-primary hover:text-white transition duration-300 shadow-md">Voltar</a>
+  </nav>
+
+  
+  <main class="w-full max-w-4xl grid grid-cols-1 gap-6">
+
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <div class="bg-primary text-white p-5 rounded-xl shadow-lg flex flex-col items-start justify-center">
+            <span class="text-sm font-light opacity-80">ROPs Este Mês</span>
+            <span class="text-4xl font-bold mt-1">247</span>
+        </div>
+        
+        <div class="bg-accent text-white p-5 rounded-xl shadow-lg flex flex-col items-start justify-center">
+            <span class="text-sm font-light opacity-80">Pendentes</span>
+            <span class="text-4xl font-bold mt-1">18</span>
+        </div>
+        
+        <div class="bg-secondary text-white p-5 rounded-xl shadow-lg flex flex-col items-start justify-center">
+            <span class="text-sm font-light opacity-80">Finalizados</span>
+            <span class="text-4xl font-bold mt-1">229</span>
+        </div>
+    </div>
+
+
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        
+        <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-xl flex flex-col">
+            <h2 class="text-xl font-semibold mb-4 text-primary">Status do Processamento</h2>
+            <div class="relative h-64 flex-grow">
+                <canvas id="graficoPizza"></canvas>
+            </div>
+        </div>
+
+        
+        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-xl flex flex-col">
+            <h2 class="text-xl font-semibold mb-4 text-primary">Distribuição de Ocorrências</h2>
+            <div class="relative h-80 flex-grow">
+                <canvas id="graficoBarras"></canvas>
+            </div>
+        </div>
+    </div>
+
+  </main>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    
+    const dadosPendentes = 18;
+    const dadosFinalizados = 229;
+    const labelsOcorrencias = ['Furto', 'Roubo', 'Tráfico', 'Homicídio', 'Outros'];
+    const dadosOcorrencias = [50, 30, 80, 15, 72];
+
+    
+    const ctxPizza = document.getElementById('graficoPizza').getContext('2d');
+    new Chart(ctxPizza, {
+      type: 'doughnut',
+      data: {
+        labels: ['Pendentes', 'Finalizados'],
+        datasets: [{
+          data: [dadosPendentes, dadosFinalizados],
+          backgroundColor: ['#FF6384', '#36A2EB'], 
+          hoverBackgroundColor: ['#FF4C6F', '#2C8CD3']
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, 
+        plugins: {
+          legend: { position: 'bottom' }, 
+          title: { display: false },
+          tooltip: {
+            callbacks: {
+              
+              label: function(context) {
+                let label = context.label || '';
+                if (label) { label += ': '; }
+                const value = context.parsed;
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(1) + '%';
+                return label + value + ' (' + percentage + ')';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    
+    const ctxBarras = document.getElementById('graficoBarras').getContext('2d');
+    new Chart(ctxBarras, {
+      type: 'bar',
+      data: {
+        labels: labelsOcorrencias,
+        datasets: [{
+          label: 'Quantidade de Ocorrências',
+          data: dadosOcorrencias,
+          backgroundColor: '#003399', 
+          borderColor: '#002266',
+          borderWidth: 1,
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false, 
+        plugins: {
+          legend: { display: false },
+          title: { display: false }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Nº de Ocorrências'
+            },
+            grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+            }
+          },
+          x: {
+            grid: {
+                display: false
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

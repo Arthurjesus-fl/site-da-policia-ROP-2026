@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Cidadão Civil</title>
+  
+  <!-- Carrega Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    /* Configuração de Fonte e Fundo */
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      color: #ffffff; 
+      /* Fundo do Cidadão */
+      background-image: 
+        linear-gradient(rgba(31, 41, 55, 0.8), rgba(31, 41, 55, 0.8)), 
+        url('https://images.unsplash.com/photo-1542831371-29b0f74f9713?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;      
+      background-position: center; 
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+    }
+
+    #lista-mensagens {
+        max-height: 500px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column; 
+    }
+    
+    #lista-mensagens::-webkit-scrollbar {
+        width: 8px;
+    }
+    #lista-mensagens::-webkit-scrollbar-thumb {
+        background: #64748b; 
+        border-radius: 4px;
+    }
+
+    .fade-in {
+        animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center p-4">
+  
+  <!-- Container Principal do Card de Diálogo -->
+  <div id="chat-container" class="w-full max-w-xl bg-white rounded-3xl shadow-2xl p-6 md:p-8 mt-10 fade-in">
+    
+    <!-- ID do Usuário para Debug/Identificação -->
+    <div id="user-info" class="text-xs text-gray-500 mb-2 text-center break-words">
+        <!-- O ID do usuário será inserido aqui pelo JavaScript -->
+    </div>
+    
+    <!-- Título do Chat -->
+    <h1 class="text-3xl font-extrabold text-indigo-700 mb-6 border-b-4 border-indigo-200 pb-3 text-center">
+      👤 CIDADÃO CIVIL: Chat de Emergência
+    </h1>
+    
+    <!-- Aviso para abrir a outra janela -->
+    <div class="p-3 mb-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
+        Para ver as respostas, abra também o arquivo <a href="./comunicaçaopolicial.html" class="font-bold underline hover:text-yellow-800">comunicaçaopolicial.html</a>.
+    </div>
+    
+    <!-- Seção de Histórico de Mensagens -->
+    <div class="mb-6">
+      <ul id="lista-mensagens" class="space-y-4 p-2 rounded-xl bg-gray-50 border border-gray-200">
+        <li id="loading-placeholder" class="text-center text-gray-500 p-4">Conectando...</li>
+      </ul>
+    </div>
+
+    <!-- Seção de Envio de Mensagem -->
+    <div class="space-y-4">
+      <textarea 
+        id="mensagem-input" 
+        placeholder="Digite sua chamada de emergência ou solicitação..."
+        rows="3"
+        class="w-full p-4 border-2 border-gray-300 rounded-xl focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 resize-none text-gray-700 shadow-inner"
+        disabled
+      ></textarea>
+      
+      <button 
+        id="enviar-btn"
+        class="w-full py-3 bg-indigo-600 text-white font-bold text-lg rounded-xl hover:bg-indigo-700 transition duration-300 shadow-lg transform hover:scale-[1.005] active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-indigo-300 disabled:bg-indigo-400"
+        disabled
+      >
+        Aguardando conexão...
+      </button>
+    </div>
+    
+  </div>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, addDoc, onSnapshot, collection, query, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // Variáveis globais para Firebase e estado
+    let db;
+    let auth;
+    let userId = null;
+    let isAuthReady = false;
+
+    // Constantes de Papel
+    const CIDADÃO_CIVIL = { name: "Cidadão Civil", role: "civil" }; 
+    const AGENTE_POLICIA = { name: "Agente da Polícia", role: "police" };
+    const COLLECTION_NAME = 'dialogs';
+    const CURRENT_USER_ROLE = CIDADÃO_CIVIL.role; // ESTE ARQUIVO É O CIDADÃO
+    
+    // Elementos do DOM
+    const mensagemInput = document.getElementById("mensagem-input");
+    const enviarBtn = document.getElementById("enviar-btn");
+    const listaMensagens = document.getElementById("lista-mensagens");
+    const userInfoDiv = document.getElementById("user-info");
+    
+    /**
+     * Formata o timestamp para um formato legível.
+     * @param {number} timestamp
+     * @returns {string} Data e hora formatada.
+     */
+    function formatarData(timestamp) {
+        if (!timestamp) return '...';
+        const date = new Date(timestamp);
+        const timeStr = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        return `${timeStr}`;
+    }
+
+    /**
+     * Cria o elemento LI (mensagem) a ser inserido na lista, adaptado para o Cidadão.
+     * @param {Object} mensagem
+     * @returns {HTMLLIElement}
+     */
+    function criarElementoMensagem(mensagem) {
+      // O Cidadão vê:
+      // 1. Sua própria mensagem (role 'civil')
+      // 2. A mensagem do Agente (role 'police')
+      const isCurrentUserMessage = mensagem.role === CURRENT_USER_ROLE; 
+      
+      const li = document.createElement("li");
+      
+      let bgColor, authorColor, alignmentClasses, authorLabel;
+
+      if (mensagem.role === AGENTE_POLICIA.role) {
+        // Estilo para o Agente da Polícia (o interlocutor)
+        bgColor = 'bg-red-100 border-red-300';
+        authorColor = 'text-red-700';
+        alignmentClasses = 'self-start text-left justify-start';
+        authorLabel = '🚓 Agente da Polícia';
+      } else if (isCurrentUserMessage) {
+        // Estilo para o Cidadão Civil (você)
+        bgColor = 'bg-indigo-100 border-indigo-400';
+        authorColor = 'text-indigo-800';
+        alignmentClasses = 'self-end text-right justify-end'; // Alinha à direita
+        authorLabel = '👤 Você';
+      } else {
+        // Caso haja outros civis ou roles não esperados
+        bgColor = 'bg-gray-200 border-gray-400';
+        authorColor = 'text-gray-800';
+        alignmentClasses = 'self-start text-left justify-start';
+        authorLabel = '👥 Outro';
+      }
+
+      li.className = `flex ${alignmentClasses} w-full`;
+      
+      const messageBubble = document.createElement("div");
+      messageBubble.className = `max-w-[85%] p-3 border-2 rounded-xl shadow-md space-y-1 ${bgColor} transition duration-200 hover:shadow-lg`;
+      
+      messageBubble.innerHTML = `
+        <div class="flex ${isCurrentUserMessage ? 'justify-end' : 'justify-start'} items-center mb-1">
+            <span class="font-bold text-sm ${authorColor} ${isCurrentUserMessage ? 'order-2' : 'order-1'}">
+                ${authorLabel}: 
+            </span>
+            <span class="text-xs text-gray-500 font-light mx-2 ${isCurrentUserMessage ? 'order-1' : 'order-2'}">
+                ${formatarData(mensagem.timestamp)}
+            </span>
+        </div>
+        <p class="text-gray-800 text-left whitespace-pre-wrap">${mensagem.text}</p>
+      `;
+
+      li.appendChild(messageBubble);
+      return li;
+    }
+
+    /**
+     * Renderiza todas as mensagens na lista e rola para o final.
+     * @param {Array<Object>} mensagens
+     */
+    function renderizarMensagens(mensagens) {
+      listaMensagens.innerHTML = ''; 
+      
+      if (mensagens.length === 0) {
+          listaMensagens.innerHTML = '<li class="text-center text-gray-500 italic p-4">Diálogo iniciado. Aguardando sua primeira chamada.</li>';
+          return;
+      }
+      
+      const mensagensOrdenadas = mensagens.sort((a, b) => a.timestamp - b.timestamp);
+      
+      mensagensOrdenadas.forEach(mensagem => {
+        const li = criarElementoMensagem(mensagem);
+        listaMensagens.appendChild(li);
+      });
+      
+      listaMensagens.scrollTop = listaMensagens.scrollHeight; 
+    }
+
+    /**
+     * Inicia o listener em tempo real do Firestore.
+     */
+    function iniciarListenerChat() {
+        if (!db || !isAuthReady) return;
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // Coleção pública para ser vista por Cidadãos e Policiais
+        const chatCollectionRef = collection(db, `artifacts/${appId}/public/data/${COLLECTION_NAME}`);
+        
+        const q = query(chatCollectionRef); 
+        
+        onSnapshot(q, (snapshot) => {
+            const mensagens = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                data.docId = doc.id; 
+                mensagens.push(data);
+            });
+            renderizarMensagens(mensagens);
+        }, (error) => {
+            console.error("Erro ao ouvir mensagens do Firestore:", error);
+            listaMensagens.innerHTML = '<li class="text-center text-red-600 font-bold p-4">Erro de conexão com o chat! Tente novamente.</li>';
+        });
+    }
+
+    /**
+     * Envia a mensagem do Cidadão para o Firestore.
+     */
+    async function enviarMensagem() {
+      const texto = mensagemInput.value.trim();
+
+      if (!isAuthReady || !userId) {
+          console.error("Autenticação não concluída. Não é possível enviar.");
+          return;
+      }
+
+      if (texto === "") {
+        mensagemInput.classList.add('animate-pulse', 'border-red-500');
+        setTimeout(() => {
+            mensagemInput.classList.remove('animate-pulse', 'border-red-500');
+        }, 800);
+        return;
+      }
+      
+      const novaMensagemCidadao = {
+        author: CIDADÃO_CIVIL.name,
+        text: texto,
+        timestamp: Date.now(),
+        senderId: userId, // ID do Firebase, fundamental para identificar o remetente
+        role: CIDADÃO_CIVIL.role // Define o papel como Cidadão
+      };
+
+      const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+      const chatCollectionRef = collection(db, `artifacts/${appId}/public/data/${COLLECTION_NAME}`);
+      
+      mensagemInput.disabled = true;
+      enviarBtn.disabled = true;
+      enviarBtn.textContent = 'Enviando...';
+
+      try {
+        await addDoc(chatCollectionRef, novaMensagemCidadao);
+        mensagemInput.value = ""; 
+      } catch (e) {
+          console.error("Erro ao enviar mensagem:", e);
+          enviarBtn.textContent = 'Erro ao Enviar!';
+          setTimeout(() => enviarBtn.textContent = 'Enviar Mensagem', 2000);
+      } finally {
+          mensagemInput.disabled = false;
+          enviarBtn.disabled = false;
+          enviarBtn.textContent = 'Enviar Mensagem';
+          mensagemInput.focus();
+      }
+    }
+
+    /**
+     * Inicializa a aplicação e Firebase.
+     */
+    async function inicializarApp() {
+      // Configuração de Log para debug
+      setLogLevel('debug');
+      
+      const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+      const firebaseConfigRaw = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
+      const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : '';
+      
+      let firebaseConfig = {};
+
+      try {
+          firebaseConfig = JSON.parse(firebaseConfigRaw);
+      } catch (e) {
+          console.error("Erro ao fazer parse da configuração do Firebase:", e);
+          // Manter o erro original se o JSON estiver mal formatado
+      }
+      
+      // *** CORREÇÃO APLICADA AQUI ***
+      // Verifica se a configuração está vazia antes de tentar inicializar
+      if (Object.keys(firebaseConfig).length === 0) {
+          console.error("Erro Crítico: Configuração do Firebase ausente ou inválida. Verifique se a variável __firebase_config foi injetada corretamente.");
+          userInfoDiv.textContent = 'ERRO: Configuração do Serviço Ausente.';
+          listaMensagens.innerHTML = '<li class="text-center text-red-700 font-bold p-4">Erro de inicialização: Configuração do Firebase não encontrada.</li>';
+          
+          mensagemInput.disabled = true;
+          enviarBtn.disabled = true;
+          enviarBtn.textContent = 'Serviço Indisponível';
+          return;
+      }
+      // *** FIM DA CORREÇÃO ***
+
+      try {
+          const app = initializeApp(firebaseConfig);
+          db = getFirestore(app);
+          auth = getAuth(app);
+
+          if (initialAuthToken) { 
+              await signInWithCustomToken(auth, initialAuthToken);
+          } else {
+              await signInAnonymously(auth);
+          }
+          
+          onAuthStateChanged(auth, (user) => {
+              if (user) {
+                  userId = user.uid;
+                  isAuthReady = true;
+                  
+                  userInfoDiv.textContent = `Seu ID (Cidadão): ${userId}`;
+                  enviarBtn.textContent = 'Enviar Mensagem';
+                  
+                  iniciarListenerChat(); 
+              } else {
+                  isAuthReady = false;
+                  // Se a autenticação falhar, tentamos novamente anonimamente
+                  if (initialAuthToken) {
+                    signInAnonymously(auth);
+                  }
+                  userInfoDiv.textContent = 'Aguardando autenticação...';
+              }
+
+              mensagemInput.disabled = !isAuthReady;
+              enviarBtn.disabled = !isAuthReady;
+          });
+      } catch(e) {
+          console.error("Erro fatal ao inicializar Firebase:", e);
+          userInfoDiv.textContent = 'Erro fatal ao conectar ao serviço de emergência.';
+          listaMensagens.innerHTML = '<li class="text-center text-red-600 font-bold p-4">Erro de inicialização. Serviço indisponível.</li>';
+      }
+
+      enviarBtn.addEventListener("click", enviarMensagem);
+      
+      mensagemInput.addEventListener("keypress", (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault(); 
+              enviarMensagem();
+          }
+      });
+    }
+
+    window.onload = inicializarApp;
+  </script>
+</body>
+</html>

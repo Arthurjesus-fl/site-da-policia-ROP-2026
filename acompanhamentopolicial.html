@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acompanhamento de Protocolo</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            color: #0f172a;
+            
+            
+            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('./imagem/Planner\ Planejador\ Anual\ Horizontal\ A4\ \(1\).png');
+            
+            background-size: cover;      
+            background-position: center; 
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6; 
+    }
+    
+    #app-container {
+      min-height: 100vh;
+    }
+    .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #1D4ED8;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+  </style>
+  <script>
+    
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary-blue': '#1D4ED8', 
+            'secondary-blue': '#3B82F6', 
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="antialiased">
+  
+  <div id="app-container" class="flex flex-col items-center pt-8 pb-12">
+
+    
+    <header class="w-full max-w-3xl mb-8 px-4 sm:px-0">
+      <div class="flex items-center p-4 bg-primary-blue text-white rounded-xl shadow-xl">
+        
+        <div class="text-3xl mr-4 p-2 bg-blue-700 rounded-full flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </div>
+        
+        <div>
+          <h1 class="text-2xl font-bold tracking-tight">Acompanhamento de Protocolo</h1>
+          <p class="text-sm opacity-90">Consultar status das ocorrências de forma rápida</p>
+        </div>
+      </div>
+    </header>
+
+    
+    <main class="w-full max-w-3xl px-4 sm:px-0 grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+      
+      <section>
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100 transition duration-300 hover:shadow-3xl">
+          <h3 class="text-xl font-semibold text-gray-800 mb-6 border-b pb-3">Busca Rápida (Público)</h3>
+
+          <form id="consult-form">
+            <div class="mb-5">
+              <label for="protocolo" class="block text-sm font-medium text-gray-700 mb-2">Número do Protocolo:</label>
+              <input type="text" id="protocolo" placeholder="Ex: 20230001234567"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-blue focus:border-primary-blue transition duration-150 shadow-sm text-gray-900"
+                    aria-label="Digite o número do protocolo" required>
+            </div>
+
+            <button type="submit"
+                    class="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-lg shadow-md text-base font-medium text-white bg-primary-blue hover:bg-secondary-blue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-blue transition duration-200 ease-in-out transform active:scale-98">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 15.75l-2.43 2.43m-1.166-1.166a11.25 11.25 0 10-2.5 2.5l2.43-2.43z" />
+              </svg>
+              Consultar Protocolo
+            </button>
+          </form>
+
+          <div id="public-result" class="mt-6 p-4 rounded-lg bg-gray-50 border border-gray-200 hidden">
+           
+          </div>
+        </div>
+      </section>
+
+      
+      <section>
+        <div class="bg-white p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-100">
+          <h3 class="text-xl font-semibold text-red-600 mb-6 border-b pb-3 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 mr-2 text-red-500">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.174 3.353 1.94 3.353h14.72c1.766 0 2.806-1.853 1.94-3.353L12 3.373a1.75 1.75 0 00-1.558 0L2.748 16.502z" />
+            </svg>
+            Uso Interno - Protocolos Ativos
+          </h3>
+
+          <div id="protocol-list-container" class="space-y-4">
+            <div id="loading-indicator" class="text-center text-gray-500">
+                <span class="loading-spinner"></span> Carregando dados...
+            </div>
+            
+          </div>
+        </div>
+      </section>
+
+      
+      <div class="lg:col-span-2 mt-8 text-center">
+        <a href="./sistema-corporativo.html"
+           class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition duration-150 shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+          </svg>
+          Voltar ao Portal
+        </a>
+      </div>
+
+    </main>
+
+  </div>
+
+  <script type="module">
+    
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, collection, query, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    let db;
+    let auth;
+    let isAuthReady = false;
+
+    
+    const fetchWithBackoff = async (func, attempts = 0) => {
+        try {
+            return await func();
+        } catch (error) {
+            if (error.code === 'resource-exhausted' && attempts < 5) {
+                const delay = Math.pow(2, attempts) * 1000 + Math.random() * 1000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                return fetchWithBackoff(func, attempts + 1);
+            }
+            throw error;
+        }
+    };
+
+    
+    const initializeFirebase = async () => {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        
+        
+        if (initialAuthToken) {
+            await fetchWithBackoff(() => signInWithCustomToken(auth, initialAuthToken));
+        } else {
+            await fetchWithBackoff(() => signInAnonymously(auth));
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            isAuthReady = true;
+            if (user) {
+                console.log("Usuário autenticado:", user.uid);
+                setupRealtimeListener();
+                setupMockData(user.uid);
+            } else {
+                console.log("Usuário não autenticado.");
+                document.getElementById('loading-indicator').textContent = "Erro de autenticação. Tente recarregar.";
+            }
+        });
+      } catch (error) {
+        console.error("Erro ao inicializar Firebase:", error);
+        document.getElementById('loading-indicator').textContent = "Erro ao conectar ao banco de dados.";
+      }
+    };
+    
+    
+    const getProtocolCollectionRef = () => {
+      return collection(db, `artifacts/${appId}/public/data/police_protocols`);
+    };
+
+    
+    const setupMockData = async (userId) => {
+      const protocolsRef = getProtocolCollectionRef();
+      const docs = await getDocs(protocolsRef);
+
+      if (docs.empty) {
+        console.log("Criando dados de protocolo simulados.");
+        await fetchWithBackoff(() => addDoc(protocolsRef, {
+            protocolNumber: '20241026999999',
+            title: 'Roubo de identidade em estabelecimento',
+            status: 'Em Investigação',
+            victims: [
+                { name: 'Maria Silva', document: '***.123.456-**' },
+                { name: 'João Santos', document: '***.789.012-**' }
+            ],
+            createdAt: Date.now()
+        }));
+        await fetchWithBackoff(() => addDoc(protocolsRef, {
+            protocolNumber: '20241027000001',
+            title: 'Desaparecimento de menor',
+            status: 'Aberto',
+            victims: [
+                { name: 'Ana Oliveira', document: '***.333.333-**' }
+            ],
+            createdAt: Date.now() - 86400000 
+        }));
+      }
+    };
+
+    
+    document.getElementById('consult-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const protocolNumber = document.getElementById('protocolo').value.trim();
+        const resultDiv = document.getElementById('public-result');
+        
+        resultDiv.classList.remove('hidden');
+        resultDiv.classList.remove('bg-red-100', 'border-red-400', 'text-red-800');
+        resultDiv.classList.add('bg-blue-100', 'border-blue-400', 'text-blue-800');
+        resultDiv.innerHTML = `
+            <p class="font-bold">Buscando protocolo: ${protocolNumber}...</p>
+            <p class="mt-2">Simulação: O status de seu protocolo é <strong>"Em Análise pela Vara Criminal"</strong>.</p>
+        `;
+        
+    });
+
+    
+    const setupRealtimeListener = () => {
+        if (!db || !isAuthReady) return;
+
+        const protocolsRef = getProtocolCollectionRef();
+        const q = query(protocolsRef); 
+
+        onSnapshot(q, (snapshot) => {
+            const protocols = [];
+            snapshot.forEach(doc => {
+                protocols.push({ id: doc.id, ...doc.data() });
+            });
+            renderProtocolList(protocols);
+        }, (error) => {
+            console.error("Erro ao receber dados de protocolo:", error);
+            document.getElementById('loading-indicator').textContent = "Erro ao carregar lista de protocolos.";
+        });
+    };
+
+    const renderProtocolList = (protocols) => {
+        const container = document.getElementById('protocol-list-container');
+        container.innerHTML = ''; // Limpa o conteúdo
+        document.getElementById('loading-indicator')?.remove(); 
+
+        if (protocols.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 italic">Nenhum protocolo ativo encontrado.</p>';
+            return;
+        }
+
+        protocols.forEach(protocol => {
+            const protocolCard = document.createElement('div');
+            protocolCard.className = 'p-4 bg-red-50 border border-red-200 rounded-lg shadow-sm';
+            
+            let victimsHtml = protocol.victims.map(victim => `
+                <li class="flex justify-between text-sm py-1 border-b border-gray-100">
+                    <span class="text-gray-700">${victim.name}</span>
+                    <span class="text-gray-500">${victim.document}</span>
+                </li>
+            `).join('');
+
+            protocolCard.innerHTML = `
+                <div class="mb-3 border-b pb-2">
+                    <p class="text-md font-bold text-red-700">${protocol.protocolNumber}</p>
+                    <p class="text-sm text-gray-800">${protocol.title}</p>
+                </div>
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-semibold uppercase px-2 py-0.5 rounded-full bg-red-100 text-red-600">${protocol.status}</span>
+                    <span class="text-xs text-gray-500">${new Date(protocol.createdAt).toLocaleDateString('pt-BR')}</span>
+                </div>
+                <p class="text-sm font-medium mt-3 mb-1">Vítimas Envolvidas (${protocol.victims.length}):</p>
+                <ul class="list-none pl-0 space-y-0.5">${victimsHtml}</ul>
+            `;
+            container.appendChild(protocolCard);
+        });
+    };
+
+    // Inicia a aplicação Firebase
+    window.onload = initializeFirebase;
+  </script>
+</body>
+</html>

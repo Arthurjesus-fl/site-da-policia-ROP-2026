@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Relatório de Ocorrência - Etapa 1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', Arial, sans-serif; }
+    .container { max-width: 900px; margin: auto; }
+    .tabs { display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px; }
+    .tab { flex: 1; text-align: center; padding: 12px; font-weight: 600; color: #555; border-radius: 8px 8px 0 0; transition: all 0.3s ease; background-color: #f1f1f1; }
+    .tab.active { background-color: #004d99; color: #fff; border-bottom: 2px solid #004d99; }
+    .campo { margin-bottom: 1.5rem; }
+    label { display: block; margin-bottom: 0.25rem; font-weight: 600; color: #333; }
+    .descricao { font-size: 0.875rem; color: #6c757d; margin-top: -0.25rem; margin-bottom: 0.5rem; }
+    input[type="text"], input[type="datetime-local"], textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+    .button-group { display: flex; justify-content: space-between; margin-top: 2rem; }
+    .nav-button { padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: background-color 0.3s; cursor: pointer; text-align: center; border: none; }
+    .back-button { background-color: #6c757d; color: #fff; }
+    .next-button { background-color: #004d99; color: #fff; }
+  </style>
+</head>
+<body class="bg-gray-100 p-5">
+
+  <div class="container bg-white p-6 md:p-10 rounded-xl shadow-2xl">
+    <h1 class="text-3xl font-extrabold text-gray-800 mb-6 border-b pb-3">Relatório de Ocorrência Policial (ROP)</h1>
+
+    <div class="tabs">
+      <div class="tab active">1. Informações Básicas</div>
+      <a href="./etapa2.html" class="tab">2. Elementos e Narrativa</a>
+      <a href="./etapa3.html" class="tab">3. Finalização</a>
+    </div>
+
+    <div class="content">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Etapa 1: Dados Fundamentais da Ocorrência</h2>
+      
+      <div class="campo">
+        <label for="evento">Evento</label>
+        <select id="evento">
+            <option value="patrulhamento" selected>Patrulhamento</option>
+            <option value="roubo">Roubo</option>
+            <option value="outros">Outros</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="atendimento">Número de Atendimento</label>
+        <input type="text" id="atendimento" placeholder="Ex: 2025-000123" required>
+      </div>
+
+      <div class="campo">
+        <label for="tipo_local">Tipo de Local</label>
+        <select id="tipo_local">
+            <option value="via_publica" selected>Via Pública</option>
+            <option value="residencia">Residência</option>
+        </select>
+      </div>
+
+      <div class="campo">
+        <label for="local_endereco">Endereço Específico</label>
+        <textarea id="local_endereco" placeholder="Ex: Rua das Flores, 120 - Centro..." required></textarea>
+      </div>
+
+      <div class="campo">
+        <label for="datahora">Data e Hora</label>
+        <input type="datetime-local" id="datahora" required>
+      </div>
+
+      <div class="campo">
+        <label for="elementos_classificacao">Classificação dos Elementos</label>
+        <select id="elementos_classificacao">
+            <option value="pessoa_envolvida" selected>Pessoa Envolvida</option>
+            <option value="arma">Apreensão de Arma</option>
+        </select>
+      </div>
+      
+      <div class="button-group">
+        <a href="sistema-corporativo.html" class="nav-button back-button">Voltar</a>
+        <button onclick="enviarEtapa1()" class="nav-button next-button">Salvar e Avançar para Etapa 2</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function enviarEtapa1() {
+      const dadosEtapa1 = {
+        evento: document.getElementById('evento').value,
+        atendimento: document.getElementById('atendimento').value,
+        tipo_local: document.getElementById('tipo_local').value,
+        local_endereco: document.getElementById('local_endereco').value,
+        datahora: document.getElementById('datahora').value,
+        elementos_classificacao: document.getElementById('elementos_classificacao').value
+      };
+
+      if (!dadosEtapa1.atendimento || !dadosEtapa1.datahora || !dadosEtapa1.local_endereco) {
+        alert("🚨 Por favor, preencha os campos obrigatórios.");
+        return;
+      }
+      
+      const dataOcorrencia = new Date(dadosEtapa1.datahora);
+      if (dataOcorrencia > new Date()) {
+          alert("🛑 A Data e Hora da ocorrência não podem ser futuras.");
+          return;
+      }
+
+      
+      fetch('http://localhost:5000/api/rop/etapa1', { 
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dadosEtapa1)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erro na rede ou servidor: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.erro) {
+          alert('❌ Erro retornado pelo Servidor: ' + data.erro);
+        } else {
+          alert('✅ Etapa 1 Salva! Protocolo: ' + data.protocolo_simulado);
+          
+          
+          localStorage.setItem('idOcorrenciaAtual', data.id_ocorrencia);
+
+          window.location.href = './etapa2.html';
+        }
+      })
+      .catch(error => {
+        console.error('Falha ao enviar dados:', error);
+        alert('🚫 Erro de conexão com o backend. O servidor Node.js está rodando na porta 5000?');
+      });
+    }
+  </script>
+</body>
+</html>

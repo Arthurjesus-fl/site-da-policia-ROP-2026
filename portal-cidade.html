@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal do Cidadão - PM SE (Design Aprimorado)</title>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-blue': '#1e40af', 
+                        'secondary-blue': '#3b82f6', 
+                        'dark-text': '#0f172a', 
+                        'gray-text': '#64748b', 
+                        'light-bg': '#f1f5f9', 
+                        'mid-bg': '#e2e8f0',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            color: #0f172a;
+            
+            
+            background-image: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.7)), url('./imagem/Planner\ Planejador\ Anual\ Horizontal\ A4\ \(1\).png');
+            
+            background-size: cover;      
+            background-position: center; 
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            
+            border-left: 6px solid transparent; 
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            
+            box-shadow: 0 20px 25px -5px rgba(30, 64, 175, 0.25), 
+                        0 8px 10px -6px rgba(30, 64, 175, 0.25);
+            
+            border-left-color: #1e40af; 
+        }
+    </style>
+</head>
+
+<body class="text-dark-text min-h-screen antialiased">
+
+    
+    <header class="bg-primary-blue/95 backdrop-blur-sm text-white py-4 shadow-2xl sticky top-0 z-10 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            
+            
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-primary-blue font-bold text-lg shadow-inner">
+                    <i data-lucide="shield-plus" class="w-6 h-6"></i>
+                </div>
+                <h1 class="text-xl font-extrabold tracking-tight">PM SE | Cidadão</h1>
+            </div>
+
+            
+            <div class="w-full md:w-80">
+                <div class="relative">
+                    
+                    <input type="text" placeholder="Buscar serviços ou protocolos..." class="w-full p-2 pl-10 text-sm rounded-lg text-dark-text focus:outline-none focus:ring-2 focus:ring-secondary-blue transition-colors duration-200" />
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+
+            
+            <div class="flex items-center gap-2 cursor-pointer group">
+                <div class="text-right">
+                    <p class="font-semibold text-sm">João Silva</p>
+                    <p class="text-xs opacity-80">Online</p>
+                </div>
+                <div class="w-10 h-10 bg-secondary-blue rounded-full flex items-center justify-center border-2 border-white group-hover:ring-2 group-hover:ring-white transition">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <div class="bg-white/95 backdrop-blur-md rounded-2xl p-8 mb-10 shadow-2xl ring-4 ring-primary-blue/30">
+            <h2 class="text-3xl font-extrabold text-primary-blue mb-3 flex items-center gap-3">
+                <i data-lucide="hand-metal" class="w-8 h-8 text-secondary-blue"></i>
+                Bem-vindo(a) ao seu Portal
+            </h2>
+            <p class="text-gray-text text-lg leading-relaxed border-l-4 border-secondary-blue pl-4">
+                Utilize os cartões abaixo para registrar e acompanhar ocorrências simples e acessar seus dados pessoais de forma rápida e segura.
+            </p>
+        </div>
+
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+            
+            
+            <div class="service-card bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl flex flex-col justify-between" onclick="window.location.href='abertura-ocorencia.html'">
+                <div>
+                    
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-md">
+                        <i data-lucide="file-plus-2" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-text mb-2">Nova Ocorrência</h3>
+                    
+                    <p class="text-gray-text text-sm leading-snug mb-4 h-14"> 
+                        Registre denúncias ou relatos iniciais de forma simples e totalmente digital.
+                    </p>
+                    
+                    <ul class="list-none text-xs text-slate-600 space-y-1 mb-6">
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Tipo e Local</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Data, Hora e Descrição</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Upload de Evidências</li>
+                    </ul>
+                </div>
+                
+                
+                <a href="abertura-ocorencia.html" class="flex items-center justify-center gap-2 px-4 py-2 bg-primary-blue text-white rounded-xl font-medium hover:bg-secondary-blue transition-colors duration-300">
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i> Iniciar Registro
+                </a>
+            </div>
+
+            
+            <div class="service-card bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl flex flex-col justify-between" onclick="window.location.href='acompanhamento.html'">
+                <div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-md">
+                        <i data-lucide="search-check" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-text mb-2">Acompanhamento</h3>
+                    <p class="text-gray-text text-sm leading-snug mb-4 h-14">
+                        Consulte o andamento e o histórico de todas as suas ocorrências registradas.
+                    </p>
+                    <ul class="list-none text-xs text-slate-600 space-y-1 mb-6">
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Consultar Status</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Histórico de Atualizações</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Notificações Automáticas</li>
+                    </ul>
+                </div>
+                
+                <a href="acompanhamento.html" class="flex items-center justify-center gap-2 px-4 py-2 bg-mid-bg text-primary-blue rounded-xl font-medium hover:bg-secondary-blue hover:text-white transition-colors duration-300">
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i> Rastrear Protocolo
+                </a>
+            </div>
+
+            
+            <div class="service-card bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl flex flex-col justify-between" onclick="window.location.href='comentarios.html'">
+                <div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-md">
+                        <i data-lucide="messages-square" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-text mb-2">Comunicação</h3>
+                    <p class="text-gray-text text-sm leading-snug mb-4 h-14">
+                        Mantenha um canal de contato direto e seguro com a Polícia Militar.
+                    </p>
+                    <ul class="list-none text-xs text-slate-600 space-y-1 mb-6">
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Área de Mensagens</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Esclarecimentos e Dúvidas</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Histórico de Conversas</li>
+                    </ul>
+                </div>
+                <a href="comentarios.html" class="flex items-center justify-center gap-2 px-4 py-2 bg-mid-bg text-primary-blue rounded-xl font-medium hover:bg-secondary-blue hover:text-white transition-colors duration-300">
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i> Acessar Chat
+                </a>
+            </div>
+
+            
+            <div class="service-card bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl flex flex-col justify-between" onclick="window.location.href='dados-pessoais.html'">
+                <div>
+                    <div class="w-14 h-14 bg-gradient-to-br from-primary-blue to-secondary-blue rounded-xl flex items-center justify-center text-white text-2xl mb-4 shadow-md">
+                        <i data-lucide="settings" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-dark-text mb-2">Configurações</h3>
+                    <p class="text-gray-text text-sm leading-snug mb-4 h-14">
+                        Gerencie suas informações de cadastro e mantenha seu perfil atualizado.
+                    </p>
+                    <ul class="list-none text-xs text-slate-600 space-y-1 mb-6">
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Alterar Contato</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Modificar Senha</li>
+                        <li class="flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5 text-secondary-blue"></i> Dados Básicos</li>
+                    </ul>
+                </div>
+                <a href="dados-pessoais.html" class="flex items-center justify-center gap-2 px-4 py-2 bg-mid-bg text-primary-blue rounded-xl font-medium hover:bg-secondary-blue hover:text-white transition-colors duration-300">
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i> Editar Perfil
+                </a>
+            </div>
+        </div>
+        
+        
+        <div class="flex flex-wrap gap-4 mt-8 justify-center">
+            
+            <a href="index.html" class="flex items-center gap-2 px-6 py-3 bg-white/90 backdrop-blur-sm text-red-600 border-2 border-red-600 rounded-lg font-medium hover:bg-red-600 hover:text-white transition-all duration-300 transform hover:scale-[1.02] shadow-lg">
+                <i data-lucide="log-out" class="w-4 h-4"></i> Sair do Portal
+            </a>
+        </div>
+
+
+        
+        <div class="bg-white/95 backdrop-blur-md border-l-4 border-primary-blue text-dark-text rounded-xl p-6 mt-10 flex items-start gap-4 shadow-xl">
+            <i data-lucide="alert-triangle" class="w-6 h-6 flex-shrink-0 text-primary-blue"></i>
+            <div>
+                <strong class="font-extrabold text-primary-blue">Aviso de Segurança:</strong>
+                Este é o portal do **CIDADÃO**. Ele não fornece acesso a informações sigilosas da PM (como dados de armas, munições, ou identidade de policiais).
+            </div>
+        </div>
+    </main>
+
+    
+    <footer class="mt-12 py-6 text-center text-sm text-slate-300 border-t border-white/10 bg-black/40 backdrop-blur-sm">
+        <p>Polícia Militar de Sergipe - Portal do Cidadão © 2025</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
