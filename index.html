@@ -333,62 +333,98 @@
         </div>
 
         
-        <div id="policeLogin" class="card login-form">
-            <div class="logo">
-                <svg class="shield-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z" fill="currentColor"/>
-                </svg>
-            </div>
-            <h1>POLÍCIA MILITAR</h1>
-            <p class="subtitle">Sistema Corporativo</p>
-            
-            <form>
-                <div class="form-group">
-                    <label class="form-label">Matrícula</label>
-                    <input type="text" class="form-input" placeholder="Digite sua matrícula">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Senha</label>
-                    <input type="password" class="form-input" placeholder="Digite sua senha">
-                </div>
-                
-                <a href="./sistema-corporativo.html"><button type="button" class="login-button police">Entrar</button></a>
-                <button type="button" class="back-button" onclick="showUserTypeSelection()">Voltar</button>
-            </form>
-            
-            <div class="restriction-notice">
-                Sistema restrito aos membros da <a href="#">Polícia Militar</a>
-            </div>
-        </div>
+       <div id="policeLogin" class="card login-form">
+    <div class="logo">
+        <svg class="shield-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L3 7V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V7L12 2Z" fill="currentColor"/>
+        </svg>
     </div>
-
-    <script>
-        function showLoginForm(type) {
-            document.getElementById('userTypeSelection').style.display = 'none';
-            document.getElementById('citizenLogin').classList.remove('active');
-            document.getElementById('policeLogin').classList.remove('active');
-            
-            if (type === 'citizen') {
-                document.getElementById('citizenLogin').classList.add('active');
-            } else if (type === 'police') {
-                document.getElementById('policeLogin').classList.add('active');
-            }
-        }
-
-        function showUserTypeSelection() {
-            document.getElementById('userTypeSelection').style.display = 'block';
-            document.getElementById('citizenLogin').classList.remove('active');
-            document.getElementById('policeLogin').classList.remove('active');
-        }
-
+    <h1>POLÍCIA MILITAR</h1>
+    <p class="subtitle">Sistema Corporativo</p>
+    
+    <form id="policeForm"> <div class="form-group">
+            <label class="form-label">Matrícula</label>
+            <input type="text" id="policeMatricula" class="form-input" placeholder="Digite sua matrícula" required>
+        </div>
         
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Formulário enviado! (Demonstração)');
-            });
-        });
-    </script>
+        <div class="form-group">
+            <label class="form-label">Senha</label>
+            <input type="password" id="policeSenha" class="form-input" placeholder="Digite sua senha" required>
+        </div>
+        
+        <button type="submit" class="login-button police">Entrar</button> 
+        <button type="button" class="back-button" onclick="showUserTypeSelection()">Voltar</button>
+    </form>
+    
+    <div class="restriction-notice">
+        Sistema restrito aos membros da <a href="#">Polícia Militar</a>
+    </div>
+</div>
+
+<script>
+    function showLoginForm(type) {
+        document.getElementById('userTypeSelection').style.display = 'none';
+        document.getElementById('citizenLogin').classList.remove('active');
+        document.getElementById('policeLogin').classList.remove('active');
+        
+        if (type === 'citizen') {
+            document.getElementById('citizenLogin').classList.add('active');
+        } else if (type === 'police') {
+            document.getElementById('policeLogin').classList.add('active');
+        }
+    }
+
+    function showUserTypeSelection() {
+        document.getElementById('userTypeSelection').style.display = 'block';
+        document.getElementById('citizenLogin').classList.remove('active');
+        document.getElementById('policeLogin').classList.remove('active');
+    }
+
+    // --- FUNÇÃO DE VALIDAÇÃO DA PM ---
+    function validatePoliceLogin(e) {
+        e.preventDefault(); // Impede o envio padrão do formulário
+        
+        const matricula = document.getElementById('policeMatricula').value.trim();
+        const senha = document.getElementById('policeSenha').value.trim();
+        
+        if (matricula === '' || senha === '') {
+            alert('Erro: Matrícula e Senha são obrigatórios para o acesso da Polícia Militar.');
+            // Opcional: focar no primeiro campo vazio
+            if (matricula === '') {
+                document.getElementById('policeMatricula').focus();
+            } else {
+                document.getElementById('policeSenha').focus();
+            }
+            return false;
+        }
+        
+        // Se a validação passar (campos preenchidos), simula o login e redireciona
+        alert('Login da Polícia Militar bem-sucedido! Redirecionando...');
+        window.location.href = './sistema-corporativo.html';
+    }
+
+    // --- FUNÇÕES DE VALIDAÇÃO DO CIDADÃO (Para manter a consistência) ---
+    function validateCitizenLogin(e) {
+        e.preventDefault();
+        
+        const usuario = document.querySelector('#citizenLogin input[type="text"]').value.trim();
+        const senha = document.querySelector('#citizenLogin input[type="password"]').value.trim();
+
+        if (usuario === '' || senha === '') {
+            alert('Erro: Usuário e Senha são obrigatórios para o acesso do Cidadão.');
+            return false;
+        }
+
+        alert('Login do Cidadão bem-sucedido! Redirecionando...');
+        window.location.href = './portal-cidade.html';
+    }
+
+    // --- ADICIONA LISTENERS AOS FORMULÁRIOS ---
+    document.getElementById('policeForm').addEventListener('submit', validatePoliceLogin);
+
+    // Também aplicando a validação no login do Cidadão para consistência:
+    const citizenForm = document.querySelector('#citizenLogin form');
+    citizenForm.addEventListener('submit', validateCitizenLogin);
+</script>
 </body>
 </html>

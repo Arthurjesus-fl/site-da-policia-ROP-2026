@@ -50,9 +50,19 @@
   </style>
 </head>
 <body class="flex flex-col items-center p-4">
+
+  <!-- NOVO: Botão de Voltar para a Página Inicial/Recarregar -->
+  <a href="/sistema-corporativo.html" onclick="window.location.reload(); return false;" 
+    class="mb-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition duration-150 ease-in-out">
+    <!-- Ícone de seta para a esquerda (usei SVG simples para não precisar de biblioteca) -->
+    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+    </svg>
+    Voltar/Recarregar
+  </a>
   
   <!-- Container Principal do Card de Diálogo -->
-  <div id="chat-container" class="w-full max-w-xl bg-white rounded-3xl shadow-2xl p-6 md:p-8 mt-10 fade-in">
+  <div id="chat-container" class="w-full max-w-xl bg-white rounded-3xl shadow-2xl p-6 md:p-8 mt-1 fade-in">
     
     <!-- ID do Usuário para Debug/Identificação -->
     <div id="user-info" class="text-xs text-gray-500 mb-2 text-center break-words">
